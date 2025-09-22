@@ -12,7 +12,7 @@ export default function Navbar({ session }: { session: Session | null }) {
         <Link href="/" className="flex items-center ">
           <Image src={"/logo.png"} alt="Logo" width={50} height={50} />
           <span className="text-2xl font-bold text-gray-800">
-            Travel Planner
+            Itinerarify
           </span>
         </Link>
 
