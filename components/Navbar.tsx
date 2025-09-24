@@ -1,50 +1,53 @@
 "use client";
 
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
-import { login, logout } from "@/lib/auth-actions";
+import { signOut } from "@/auth";
 import { Session } from "next-auth";
+import { login, logout } from "@/lib/auth-actions";
+import Image from "next/image";
+import logo from "/logo.png";
 
 export default function Navbar({ session }: { session: Session | null }) {
   return (
-    <nav className="bg-white shadow-md py-4 border-b border-gray-200">
+    <nav className="bg-white shadow-md py-4  border-b border-gray-200">
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-8">
-        <Link href="/" className="flex items-center ">
-          <Image src={"/logo.png"} alt="Logo" width={50} height={50} />
+        <Link href="/" className="flex items-center">
+          <Image src={"/logo.png"} alt="logo" width={50} height={50} />
           <span className="text-2xl font-bold text-gray-800">
-            Itinerarify
+            Travel Planner
           </span>
         </Link>
-
         <div className="flex items-center space-x-4">
-          {session ? (
+          {session?.user ? (
             <>
-              <Link
-                href={"/trips"}
-                className="text-slate-900 hover:text-sky-500"
-              >
+              <Link href="/trips" className="text-slate-900 hover:text-sky-500">
                 My Trips
               </Link>
-              <Link
-                href={"/globe"}
-                className="text-slate-900 hover:text-sky-500"
-              >
-                Globe
-              </Link>
-
+              <div className="flex items-center space-x-2">
+                {session.user.image && (
+                  <img
+                    src={session.user.image}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                )}
+                <span className="text-sm text-slate-700">
+                  @{session.user.name || session.user.email}
+                </span>
+              </div>
               <button
                 onClick={() => logout()}
-                className="flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white p-2 rounded-sm gap-2 cursor-pointer"
+                className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded cursor-pointer"
               >
                 Sign Out
               </button>
             </>
           ) : (
             <button
-              onClick={() => login()}
-              className="flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white p-2 rounded-sm gap-2 cursor-pointer"
+              onClick={login}
+              className="flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded-xl transition"
             >
-              Sign In
               <svg
                 className="w-6 h-6"
                 xmlns="http://www.w3.org/2000/svg"

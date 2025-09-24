@@ -1,14 +1,19 @@
 "use client";
 import Image from "next/image";
-import { Trip } from "@prisma/client";
-import { Calendar, Plus } from "lucide-react";
+import { Trip, Location } from "@prisma/client";
+import { Calendar, Plus, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { useState } from "react";
+import Map from "./Map";
+
+export type TripWithLocation = Trip & {
+  locations: Location[];
+};
 
 interface TripDetailClientProps {
-  trip: Trip;
+  trip: TripWithLocation;
 }
 
 export default function TripDetailClient({ trip }: TripDetailClientProps) {
@@ -43,7 +48,7 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
           </div>
         </div>
         <div className="mt-4 md:mt-0 ">
-          <Link href={`/trips/${trip.id}/itinerary/new`}>
+          <Link href={`/trips/${trip.id}/itenerary/new`}>
             <Button>
               <Plus className="mr-2 h-5 w-5" />
               Add Location
@@ -88,9 +93,21 @@ export default function TripDetailClient({ trip }: TripDetailClientProps) {
                   </div>
 
                   <div className="flex items-start">
-                    
-
+                    <MapPin className="h-6 w-6 mr-3 text-gray-500" />
+                    <div>
+                      <p>Destinations</p>
+                      <p>
+                        {trip.locations.length}{" "}
+                        {trip.locations.length > 1 ? "locations" : "location"}
+                      </p>
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="h-72 rounded-lg overflow-hidden shadow">
+                  <Map itineraries={trip.locations} />
                 </div>
               </div>
             </div>
